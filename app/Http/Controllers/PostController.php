@@ -23,7 +23,7 @@ class PostController extends Controller
     public function index() 
     {
         $posts = $this->getPosts();
-        return view('posts.index', ['posts' => $posts]);
+        return view('posts.index', compact('posts'));
     }
 
     public function show($id)
@@ -73,8 +73,7 @@ class PostController extends Controller
     
     public function update(Request $request, $id)
     {
-        // In a real application, you would update the post in your database
-        // For this demo, we'll just redirect back to the index
+        
         
         return to_route('posts.index');
     }

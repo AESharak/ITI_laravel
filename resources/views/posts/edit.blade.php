@@ -6,6 +6,7 @@
             </div>
             
             <div class="px-6 py-4">
+                <!-- post to trick the broswer -->
                 <form method="POST" action="{{ route('posts.update', $post['id']) }}">
                     @csrf
                     @method('PUT')
