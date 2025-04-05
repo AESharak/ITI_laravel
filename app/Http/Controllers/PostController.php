@@ -50,27 +50,7 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        //1-get the data
-        //2- store the data in database
-        //3- redirect to posts index page
-
-        // $data = $_POST;
-        // dd($data);
-        // //print and stop execution (die dump)
-        // dd('hello world stop execution here');
-
-        // //$data = request()->all();
-        // $requestObject = request();
-        // $data = $requestObject->all();
-
-        // $title = request()->title;
-        // $description = request()->description;
-        // $postCreator = request()->post_creator;
-        // dd($title, $description, $postCreator);
-
-        // dd($request->all());
-
-        //query to return the data from database
+       
         return to_route('posts.index');
     }
 }
