@@ -8,19 +8,7 @@ use App\Models\User;
 
 class PostController extends Controller 
 {
-    /**
-     * Get all available posts
-     *
-     * @return array
-     */
-    private function getPosts()
-    {
-        return [
-            ['id' => 1, 'title' => 'First Post', 'posted_by' => 'Ahmed','email'=> 'ahmed@gmail.com', 'created_at' => '2025-5-10 10:00:00', 'description' => 'This is the first post description'],
-            ['id' => 2, 'title' => 'Second Post', 'posted_by' => 'Mohamed','email'=> 'mohamed@gmail.com', 'created_at' => '2024-11-10 10:00:00', 'description' => 'This is the second post description'],
-            ['id' => 3, 'title' => 'Third Post', 'posted_by' => 'Ibrahem', 'email'=> 'ibrahem@gmail.com','created_at' => '2025-9-27 10:00:00', 'description' => 'This is the third post description'],
-        ];
-    }
+    
 
     public function index() 
     {
@@ -39,7 +27,7 @@ class PostController extends Controller
         // $post = Post::find($id);
         $post = Post::where('id', $id)->first();
 
-        dd($post->user_id, $post->user);
+       
         // If post not found, redirect to posts index or return 404
         if (!$post) {
             abort(404);
@@ -82,26 +70,35 @@ class PostController extends Controller
     
     public function edit($id)
     {
-        $posts = $this->getPosts();
+        // Find the post that matches the ID from the database
+        $post = Post::findOrFail($id);
         
-        // Find the post that matches the ID from the URL
-        $post = collect($posts)->firstWhere('id', (int)$id);
+        // Get all users for the dropdown
+        $users = User::all();
 
-        // If post not found, redirect to posts index or return 404
-        if (!$post) {
-            abort(404);
-        }
-
-        return view('posts.edit', [
-            'post' => $post,
-        ]);
+        return view('posts.edit', compact('post', 'users'));
     }
     
     public function update(Request $request, $id)
     {
+        // Validate the request
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'post_creator' => 'required|exists:users,id'
+        ]);
         
+        // Find the post
+        $post = Post::findOrFail($id);
         
-        return to_route('posts.index');
+        // Update the post
+        $post->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'user_id' => $request->post_creator
+        ]);
+        
+        return redirect()->route('posts.index')->with('success', 'Post updated successfully');
     }
 
     public function destroy($id)

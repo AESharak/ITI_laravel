@@ -6,8 +6,7 @@
             </div>
             
             <div class="px-6 py-4">
-                <!-- post to trick the broswer -->
-                <form method="POST" action="{{ route('posts.update', $post['id']) }}">
+                <form method="POST" action="{{ route('posts.update', $post->id) }}">
                     @csrf
                     @method('PUT')
                     <!-- Title Input -->
@@ -17,9 +16,12 @@
                             name="title"
                             type="text"
                             id="title"
-                            value="{{ $post['title'] }}"
+                            value="{{ $post->title }}"
                             class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 py-2 px-3 border"
                         >
+                        @error('title')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     
                     <!-- Description Textarea -->
@@ -30,7 +32,10 @@
                             id="description"
                             rows="5"
                             class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 py-2 px-3 border"
-                        >{{ $post['description'] }}</textarea>
+                        >{{ $post->description }}</textarea>
+                        @error('description')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     
                     <!-- Post Creator Select -->
@@ -41,10 +46,15 @@
                             id="creator"
                             class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 py-2 px-3 border bg-white"
                         >
-                            <option value="1" {{ $post['posted_by'] == 'Ahmed' ? 'selected' : '' }}>Ahmed</option>
-                            <option value="2" {{ $post['posted_by'] == 'Mohamed' ? 'selected' : '' }}>Mohamed</option>
-                            <option value="3" {{ $post['posted_by'] == 'Ibrahem' ? 'selected' : '' }}>Ibrahem</option>
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}" {{ $post->user_id == $user->id ? 'selected' : '' }}>
+                                    {{ $user->name }}
+                                </option>
+                            @endforeach
                         </select>
+                        @error('post_creator')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     
                     <!-- Submit Button -->
