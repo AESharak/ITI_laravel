@@ -19,11 +19,9 @@ class PostController extends Controller
 
     public function show($id)
     {
-        
-        
         // Find the post that matches the ID from the URL
         // $post = Post::find($id);
-        $post = Post::where('id', $id)->first();
+        $post = Post::with(['user', 'comments.user'])->where('id', $id)->first();
 
        
         // If post not found, redirect to posts index or return 404
@@ -31,8 +29,12 @@ class PostController extends Controller
             abort(404);
         }
 
+        // Get all users for the comment form
+        $users = User::all();
+
         return view('posts.show', [
             'post' => $post,
+            'users' => $users
         ]);
     }
 

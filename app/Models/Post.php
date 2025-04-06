@@ -15,8 +15,17 @@ class Post extends Model
         'description',
         'user_id'
     ];
-    public function user ()
+    
+    public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    
+    /**
+     * Get all comments for the post.
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }
