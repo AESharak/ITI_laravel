@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Post;
+use App\Models\User;
 
 class PostController extends Controller 
 {
@@ -22,17 +24,22 @@ class PostController extends Controller
 
     public function index() 
     {
-        $posts = $this->getPosts();
+
+
+        $posts = Post::all();
+        // dd($posts);
         return view('posts.index', compact('posts'));
     }
 
     public function show($id)
     {
-        $posts = $this->getPosts();
+        
         
         // Find the post that matches the ID from the URL
-        $post = collect($posts)->firstWhere('id', $id);
+        // $post = Post::find($id);
+        $post = Post::where('id', $id)->first();
 
+        dd($post->user_id, $post->user);
         // If post not found, redirect to posts index or return 404
         if (!$post) {
             abort(404);
@@ -45,12 +52,31 @@ class PostController extends Controller
 
     public function create()
     {
-        return view('posts.create');
+        $users = User::all();
+        return view('posts.create',[
+            "users"=> $users
+        ]);
     }
 
     public function store(Request $request)
     {
+        $title = request()->title;
+        $description = request()->description;
+        $postCreator = request()->post_creator;
        
+        // old syntax 
+        // $post = new Post;
+        // $post->title = $title;
+        // $post->description = $description;
+
+        // $post->save();
+
+        Post::create([
+            'title' => $title,
+            'description' => $description,
+            'user_id' => $postCreator
+        ]);
+
         return to_route('posts.index');
     }
     
