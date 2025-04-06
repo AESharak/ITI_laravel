@@ -12,10 +12,8 @@ class PostController extends Controller
 
     public function index() 
     {
-
-
-        $posts = Post::all();
-        // dd($posts);
+        // Change from latest() to orderBy('id') to sort by ID
+        $posts = Post::orderBy('id')->paginate(10);
         return view('posts.index', compact('posts'));
     }
 
