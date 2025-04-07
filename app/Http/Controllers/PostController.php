@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
 use App\Http\Requests\StorePostRequest;
@@ -15,7 +14,7 @@ class PostController extends Controller
     {
         // Change from latest() to orderBy('id') to sort by ID
         // Added with('user') to eager load the user relationship
-        $posts = Post::with('user')->orderBy('id')->paginate(10);
+        $posts = Post::with('user')->latest('id')->paginate(10);
         return view('posts.index', compact('posts'));
     }
 
@@ -91,7 +90,7 @@ class PostController extends Controller
         return view('posts.edit', compact('post', 'users'));
     }
     
-    public function update(Request $request, $id)
+    public function update(StorePostRequest $request, $id)
     {
         // Validate the request
         $request->validate([

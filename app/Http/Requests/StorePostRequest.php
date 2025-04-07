@@ -22,7 +22,7 @@ class StorePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-        'title' => ['required','min:3'],
+        'title' => ['required','min:3', 'unique:posts,title,'.$this->route('post')],
         'description' => ['required','min:10'],
         'post_creator' => ['required'],
         ];
@@ -33,6 +33,7 @@ class StorePostRequest extends FormRequest
     {
         return [
                 'title.required' => "اكتب هنا متسيبهاش فاضية" ,
+                'title.unique' => "الاسم ده حد كتبه قبلك معلش اكتب حاجه تانيه" ,
                 'title.min' => "معلش زود شويه .. متكتبش اقل من 3 حروف" ,
                 'description.required' => "اكتب هنا متسيبهاش فاضية" ,
                 'description.min' => "معلش زود شويه .. متكتبش اقل من 10 حروف" ,

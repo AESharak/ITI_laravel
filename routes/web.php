@@ -1,26 +1,38 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
+});
 
-// Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-// Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-// Route::get('/posts/{post}/', [PostController::class, 'show'])->name('posts.show');
-// Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
-// Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+require __DIR__.'/auth.php';
 
-Route::resource('posts',PostController::class);
 
+Route::resource('posts',PostController::class)->except(['index','show'])->middleware('auth');
+Route::resource('posts', PostController::class)->only(['index', 'show']);
 // Comment Routes
-Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
-Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
-Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
-Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit')->middleware('auth');
+Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update')->middleware('auth');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy')->middleware('auth');
