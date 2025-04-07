@@ -15,8 +15,12 @@
                             name="title"
                             type="text"
                             id="title"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 py-2 px-3 border"
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 py-2 px-3 border @error('title') border-red-500 @enderror"
+                            value="{{ old('title') }}"
                         >
+                        @error('title')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     
                     <!-- Description Textarea -->
@@ -26,8 +30,11 @@
                             name="description"
                             id="description"
                             rows="5"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 py-2 px-3 border"
-                        ></textarea>
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 py-2 px-3 border @error('description') border-red-500 @enderror"
+                        >{{ old('description') }}</textarea>
+                        @error('description')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     
                     <!-- Post Creator Select -->
@@ -36,12 +43,15 @@
                         <select
                             name="post_creator"
                             id="creator"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 py-2 px-3 border bg-white"
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 py-2 px-3 border bg-white @error('post_creator') border-red-500 @enderror"
                         >
                         @foreach ($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            <option value="{{ $user->id }}" {{ old('post_creator') == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
                         @endforeach
                         </select>
+                        @error('post_creator')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     
                     <!-- Submit Button -->
@@ -57,4 +67,4 @@
             </div>
         </div>
     </div>
-</x-layout> 
+</x-layout>

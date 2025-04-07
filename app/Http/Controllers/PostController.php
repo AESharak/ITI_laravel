@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
+use App\Http\Requests\StorePostRequest;
 
 class PostController extends Controller 
 {
@@ -46,8 +47,18 @@ class PostController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
+        // $request->validate([
+        //     'title' => ['required','min:3'],
+        //     'description' => ['required','min:10'],
+        //     'post_creator' => ['required'],
+        // ],[
+        //     'title.required' => "اكتب هنا متسيبهاش فاضية" ,
+        //     'title.min' => "معلش زود شويه .. متكتبش اقل من 3 حروف" ,
+        //     'description.required' => "اكتب هنا متسيبهاش فاضية" ,
+        //     'description.min' => "معلش زود شويه .. متكتبش اقل من 10 حروف" ,
+        // ]);
         $title = request()->title;
         $description = request()->description;
         $postCreator = request()->post_creator;
