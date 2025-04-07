@@ -24,7 +24,7 @@ class StorePostRequest extends FormRequest
         return [
         'title' => ['required','min:3', 'unique:posts,title,'.$this->route('post')],
         'description' => ['required','min:10'],
-        'post_creator' => ['required'],
+        'post_creator' => ['required','exists:users,id'],
         ];
     }
 
@@ -38,6 +38,7 @@ class StorePostRequest extends FormRequest
                 'description.required' => "اكتب هنا متسيبهاش فاضية" ,
                 'description.min' => "معلش زود شويه .. متكتبش اقل من 10 حروف" ,
                 'post_creator.required' =>  "اكتب هنا متسيبهاش فاضية" ,
+                'post_creator.exists' =>  "يا لئيــــــم قفشتك .. متعملش كده تاني بقي" ,
         ];
     }
 }
