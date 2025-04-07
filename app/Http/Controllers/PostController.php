@@ -14,7 +14,8 @@ class PostController extends Controller
     public function index() 
     {
         // Change from latest() to orderBy('id') to sort by ID
-        $posts = Post::orderBy('id')->paginate(10);
+        // Added with('user') to eager load the user relationship
+        $posts = Post::with('user')->orderBy('id')->paginate(10);
         return view('posts.index', compact('posts'));
     }
 
