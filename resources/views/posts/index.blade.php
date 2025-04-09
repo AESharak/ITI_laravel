@@ -14,6 +14,7 @@
                        <tr>
                            <th class="px-4 py-2 font-medium whitespace-nowrap text-gray-900">#</th>
                            <th class="px-4 py-2 font-medium whitespace-nowrap text-gray-900">Title</th>
+                           <th class="px-4 py-2 font-medium whitespace-nowrap text-gray-900">Slug</th>
                            <th class="px-4 py-2 font-medium whitespace-nowrap text-gray-900">Posted By</th>
                            <th class="px-4 py-2 font-medium whitespace-nowrap text-gray-900">Created At</th>
                            <th class="px-4 py-2 font-medium whitespace-nowrap text-gray-900">Actions</th>
@@ -23,7 +24,12 @@
                     @foreach ($posts as $post)
                         <tr>
                             <td class="px-4 py-2 font-medium whitespace-nowrap text-gray-900">{{$post->id}}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{$post->title}}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-gray-700 overflow-hidden text-ellipsis max-w-[200px]">
+                                {{ $post->title }}
+                            </td>
+                            <td class="px-4 py-2 whitespace-nowrap text-gray-700 overflow-hidden text-ellipsis max-w-[200px]">
+                                {{ $post->slug }}
+                            </td>
                             <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{$post->user ? $post->user->name : 'Not Available'}}</td>
                             <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{$post->created_at->format('Y-m-d')}}</td>
                             <td class="px-4 py-2 whitespace-nowrap text-gray-700 space-x-2">

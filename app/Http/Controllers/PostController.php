@@ -92,14 +92,7 @@ class PostController extends Controller
     
     public function update(StorePostRequest $request, $id)
     {
-        // Validate the request
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'post_creator' => 'required|exists:users,id'
-        ]);
-        
-        // Find the post
+        // Find the existing post
         $post = Post::findOrFail($id);
         
         // Update the post
