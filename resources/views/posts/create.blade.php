@@ -6,7 +6,7 @@
             </div>
             
             <div class="px-6 py-4">
-                <form method="POST" action="/posts">
+                <form method="POST" action="/posts" enctype="multipart/form-data">
                     @csrf
                     <!-- Title Input -->
                     <div class="mb-4">
@@ -35,6 +35,16 @@
                         @error('description')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
+                    </div>
+
+                    <!-- Image uploading component -->
+
+                    <div>
+                        <label for="image">Image (JPG, PNG only)</label>
+                        <input type="file" name="image" id="image" value="{{ old('image') }}">
+                        @error('image')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                     </div>
                     
                     <!-- Post Creator Select -->

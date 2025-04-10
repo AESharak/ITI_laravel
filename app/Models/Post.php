@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
+use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
 {
@@ -15,7 +16,8 @@ class Post extends Model
     protected $fillable = [
         'title',
         'description',
-        'user_id'
+        'user_id',
+        'image'
     ];
     
     public function user()
@@ -45,4 +47,37 @@ class Post extends Model
             ]
         ];
     }
+
+    // Handle image uploads
+    public function setImageAttribute($value)
+    {
+        if ($value && is_file($value)){
+            // Delete old image if it exists
+            if ($this->image){
+                Storage::disk('public')->delete($this->image);
+            }
+
+            $path = $value->store('posts', 'public');
+            $this->attributes['image'] = $path;
+        }
+    }
+
+    // Get the full URL for the image 
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? Storage::url($this->image) : null;
+    }
+
+    // Delete the image when post is deleted
+    public static function boot()
+    {
+        parent::boot();
+        
+        static::deleting(function ($post) {
+            if ($post->image) {
+                Storage::disk('public')->delete($post->image);
+            }
+        });
+    }
+
 }

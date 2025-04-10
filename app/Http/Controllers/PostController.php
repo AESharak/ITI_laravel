@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use App\Http\Requests\StorePostRequest;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller 
 {
@@ -49,34 +50,22 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request)
     {
-        // $request->validate([
-        //     'title' => ['required','min:3'],
-        //     'description' => ['required','min:10'],
-        //     'post_creator' => ['required'],
-        // ],[
-        //     'title.required' => "اكتب هنا متسيبهاش فاضية" ,
-        //     'title.min' => "معلش زود شويه .. متكتبش اقل من 3 حروف" ,
-        //     'description.required' => "اكتب هنا متسيبهاش فاضية" ,
-        //     'description.min' => "معلش زود شويه .. متكتبش اقل من 10 حروف" ,
-        // ]);
-        $title = request()->title;
-        $description = request()->description;
-        $postCreator = request()->post_creator;
-       
-        // old syntax 
-        // $post = new Post;
-        // $post->title = $title;
-        // $post->description = $description;
+        // Extract validated data
+        $data = [
+            'title' => $request->title,
+            'description' => $request->description,
+            'user_id' => $request->post_creator,
+        ];
+        
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image');
+        }
+        
+        // Create the post
+        Post::create($data);
 
-        // $post->save();
-
-        Post::create([
-            'title' => $title,
-            'description' => $description,
-            'user_id' => $postCreator
-        ]);
-
-        return to_route('posts.index');
+        return to_route('posts.index')->with('success', 'Post created successfully');
     }
     
     public function edit($id)
@@ -95,12 +84,36 @@ class PostController extends Controller
         // Find the existing post
         $post = Post::findOrFail($id);
         
-        // Update the post
-        $post->update([
+        // Handle image deletion if checkbox is checked
+        if ($request->has('delete_image') && $post->image) {
+            // Delete the image file from storage
+            Storage::disk('public')->delete($post->image);
+            
+            // Directly update the image column in the database
+            $post->timestamps = false; // Prevent updated_at from being changed
+            $post->getConnection()->table('posts')
+                ->where('id', $post->id)
+                ->update(['image' => null]);
+            $post->timestamps = true; // Re-enable timestamps
+            
+            // Refresh the model to reflect the database change
+            $post->refresh();
+        }
+        
+        // Prepare data for update
+        $data = [
             'title' => $request->title,
             'description' => $request->description,
             'user_id' => $request->post_creator
-        ]);
+        ];
+        
+        // Add image to update data if a new image was uploaded
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image');
+        }
+        
+        // Update the post
+        $post->update($data);
         
         return redirect()->route('posts.index')->with('success', 'Post updated successfully');
     }

@@ -13,7 +13,16 @@
                 <div class="mb-2">
                     <h3 class="text-lg font-medium text-gray-800">Description: <span class="font-normal">{{ $post['description'] }}</span></h3>
                 </div>
-               
+
+                
+                @if($post->image)
+                <div class="mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Image:</h3>
+                    <div class="rounded-lg overflow-hidden border border-gray-200">
+                        <img src="/storage/{{ $post->image }}" alt="{{ $post->title }}" class="w-full object-cover h-auto max-h-96">
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
         
