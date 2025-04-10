@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+// use App\Jobs\PruneOldPostsJob;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -28,6 +29,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+// PruneOldPostsJob::dispatch();
 
 Route::resource('posts',PostController::class)->except(['index','show'])->middleware('auth');
 Route::resource('posts', PostController::class)->only(['index', 'show']);
