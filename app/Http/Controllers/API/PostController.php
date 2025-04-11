@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     public function index (){
-        $posts = Post::all();
+        $posts = Post::with('user')->paginate(10);
         return PostResource::collection($posts);
     }
 
@@ -23,6 +23,12 @@ class PostController extends Controller
         //     'description' => $post->description,
         //     'image' => $post->image
         // ];
+        if (!$post){
+            return response()->json([
+                'message' => 'Post not found',
+                'status' => 'error'
+            ], 404);
+        }
         return new PostResource($post);
     }
     
