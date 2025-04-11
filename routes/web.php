@@ -31,8 +31,9 @@ require __DIR__.'/auth.php';
 
 // PruneOldPostsJob::dispatch();
 
-Route::resource('posts',PostController::class)->except(['index','show'])->middleware('auth');
-Route::resource('posts', PostController::class)->only(['index', 'show']);
+// Route::resource('posts',PostController::class)->except(['index','show'])->middleware('auth');
+// Route::resource('posts', PostController::class)->only(['index', 'show']);
+Route::resource('posts',PostController::class)->middleware('auth');
 // Comment Routes
 Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
 Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit')->middleware('auth');
