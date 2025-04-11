@@ -16,13 +16,14 @@ class PostController extends Controller
     }
 
     public function show($id){
-        $post = Post::find($id);
+        // $post = Post::find($id);
         // return [
         //     'id' => $post->id,
         //     'title' => $post->title,
         //     'description' => $post->description,
         //     'image' => $post->image
         // ];
+        $post = Post::with('user')->find($id);
         if (!$post){
             return response()->json([
                 'message' => 'Post not found',
