@@ -15,6 +15,7 @@
                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posted By</th>
                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -35,6 +36,9 @@
                            </td>
                            <td class="px-6 py-4">
                                <div class="text-sm text-gray-900">{{ $post->title }}</div>
+                           </td>
+                           <td class="px-6 py-4">
+                               <div class="text-sm text-gray-900">{{ $post->slug }}</div>
                            </td>
                            <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{$post->user ? $post->user->name : 'Not Available'}}</td>
                            <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{$post->created_at->format('Y-m-d')}}</td>
